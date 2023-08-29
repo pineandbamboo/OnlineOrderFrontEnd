@@ -40,7 +40,7 @@ class LoginForm extends React.Component {
       >
         <Form.Item
           name="username"
-          rules={[{ required: true, message: "Please input your Username!" }]}
+          rules={[{ required: true, message: "Please input your Email!" }]}
         >
           <Input prefix={<UserOutlined />} placeholder="Username" />
         </Form.Item>

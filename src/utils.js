@@ -1,12 +1,14 @@
 export const login = (credentials) => {
-  const loginUrl = `login?username=$(credentials.username)&password=${credentials.password}`;
-
+  const loginUrl = `login?username=${credentials.username}&password=${credentials.password}`;
+  // const loginUrl = "/login";
+  // console.log(credentials);
   // fetch will return something called a Promise
   return fetch(loginUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: credentials.toString(),
   })
     .then((response) => {
       if (response.status < 200 || response.status >= 300) {
@@ -14,7 +16,7 @@ export const login = (credentials) => {
       }
     })
     .finally(() => {
-      console.log("finally login message whatever any error is thrown");
+      // console.log("finally login message whatever any error is thrown");
     });
 };
 export const signup = (data) => {
@@ -87,11 +89,12 @@ export const checkout = () => {
   });
 };
 
-export const addItemToCart = (itemId) => {
+export const addItemToCart = (itemId, quantity) => {
   const payload = {
     menu_id: itemId,
+    quantity: quantity,
   };
-
+  console.log("Utils.js add item" + itemId + "with quantity" + quantity);
   return fetch(`/cart`, {
     method: "POST",
     headers: {

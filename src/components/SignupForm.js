@@ -1,8 +1,8 @@
 import { Button, Form, Input, message, Modal } from "antd";
 import React from "react";
-import { LockOutlined, UserOutliner } from "@ant-design/icons";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { signup } from "../utils";
-import { useState, UserOutlined } from "react";
+import { useState } from "react";
 
 const SignupForm = () => {
   const [displayModal, setDisPlayModal] = useState(false);
@@ -52,10 +52,10 @@ const SignupForm = () => {
             name="password"
             rules={[{ required: true, message: "Please input your password" }]}
           >
-            <Input prefix={<UserOutlined />} placeholder="Password" />
+            <Input prefix={<LockOutlined />} placeholder="Password" />
           </Form.Item>
           <Form.Item
-            name="firstName"
+            name="first_name"
             rules={[
               { required: true, message: "Please input your first name" },
             ]}
@@ -63,7 +63,7 @@ const SignupForm = () => {
             <Input placeholder="Your First Name" />
           </Form.Item>
           <Form.Item
-            name="lastName"
+            name="last_name"
             rules={[{ required: true, message: "Please input your last name" }]}
           >
             <Input placeholder="Your Last Name" />

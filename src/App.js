@@ -1,6 +1,8 @@
 import { Layout, Typography } from "antd";
 import { useState } from "react";
+import FoodList from "./components/FoodList";
 import LoginForm from "./components/LoginForm";
+import MyCart from "./components/MyCart";
 import SignupForm from "./components/SignupForm";
 
 const { Header, Content } = Layout;
@@ -17,11 +19,13 @@ function App() {
         >
           <Title
             level={2}
-            style={{ color: "white", lineHeight: "inherit", marginBottom: 0 }}
+            style={{ color: "white", lineHeight: 1, marginBottom: 0 }}
           >
             Lai Food
           </Title>
-          <div>{authed ? <div>My Cart Placeholder</div> : <SignupForm />}</div>
+          <div>
+            {authed ? /*<div>User Center</div>*/ <MyCart /> : <SignupForm />}
+          </div>
         </div>
       </Header>
       <Content
@@ -32,7 +36,7 @@ function App() {
         }}
       >
         {authed ? (
-          <div>Foodlist placeholder</div>
+          <FoodList />
         ) : (
           <LoginForm onSuccess={() => setAuthed(true)} />
         )}
