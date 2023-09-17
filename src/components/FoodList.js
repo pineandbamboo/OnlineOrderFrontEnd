@@ -12,14 +12,45 @@ import {
 import { useEffect, useState } from "react";
 import { addItemToCart, getMenus, getRestaurants, getCart } from "../utils";
 import { ItemQuantityModifier } from "./ItemQuantityModifier";
-const { Option } = Select;
+// const { Option } = Select;
 
-const FoodList = () => {
+const FoodList = (drawerClickedTimes, setDrawerClickedTimes) => {
   const [foodData, setFoodData] = useState([]);
+  const [cartData, setCartData] = useState([]);
   const [curRest, setCurRest] = useState();
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingRest, setLoadingRest] = useState(false);
+  const [plusMinusButtonClickedTimes, setPlusMinusButtonClickedTimes] =
+    useState(0);
+
+  const getQuantityById = (orderItemId, order_items) => {
+    const foundItem = order_items.find(
+      (item) => item.menu_item_id === orderItemId
+    );
+
+    if (foundItem) {
+      return foundItem.quantity;
+    } else {
+      return 0; // Return null (or any other value) if the item with the specified order_item_id is not found.
+    }
+  };
+
+  // get ths shopping cart data
+  useEffect(() => {
+    setLoading(true);
+    getCart()
+      .then((data) => {
+        setCartData(data);
+        console.log("updated cart data");
+      })
+      .catch((err) => {
+        message.error(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [plusMinusButtonClickedTimes, drawerClickedTimes]);
 
   useEffect(() => {
     setLoadingRest(true);
@@ -62,7 +93,7 @@ const FoodList = () => {
         onChange={() => {}}
       >
         {restaurants.map((item) => {
-          return <Option value={item.id}>{item.name}</Option>;
+          return <Select value={item.id}>{item.name}</Select>;
         })}
       </Select>
       {curRest && (
@@ -99,10 +130,19 @@ const FoodList = () => {
                 <Row align="middle" justify="space-between">
                   <Col>{`Price: ${item.price}`}</Col>
                   <Col>
-                    <ItemQuantityModifier
+                    {/* <ItemQuantityModifier
                       itemId={item.id}
                       quantity={0}
                       shape={"square"}
+                    /> */}
+                    <ItemQuantityModifier
+                      itemId={item.id}
+                      quantity={getQuantityById(item.id, cartData?.order_items)}
+                      shape={"circle"}
+                      setPlusMinusButtonClickedTimes={
+                        setPlusMinusButtonClickedTimes
+                      }
+                      plusMinusButtonClickedTimes={plusMinusButtonClickedTimes}
                     />
                   </Col>
                 </Row>

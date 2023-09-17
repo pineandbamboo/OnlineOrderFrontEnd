@@ -6,12 +6,12 @@ import Item from "antd/es/list/Item";
 
 const { Text } = Typography;
 
-export const MyCart = () => {
+export const MyCart = ({ drawerClickedTimes, setDrawerClickedTimes }) => {
   const [cartVisible, setCartVisible] = useState(false);
   const [cartData, setCartData] = useState();
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  // const [refresh, setRefresh] = useState(false);
 
   const [plusMinusButtonClickedTimes, setPlusMinusButtonClickedTimes] =
     useState(0);
@@ -21,10 +21,10 @@ export const MyCart = () => {
     if (!cartVisible) {
       return;
     }
-
     setLoading(true);
     getCart()
       .then((data) => {
+        data.order_items.sort((a, b) => a.menu_item_id - b.menu_item_id);
         setCartData(data);
         console.log("updated cart data");
       })
@@ -34,14 +34,14 @@ export const MyCart = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [cartVisible, refresh, plusMinusButtonClickedTimes]);
+  }, [cartVisible, plusMinusButtonClickedTimes]);
 
   const onCheckOut = () => {
     setChecking(true);
     checkout()
       .then(() => {
         message.success("Successfully checkout");
-        setCartVisible(false);
+        onCloseDrawer();
       })
       .catch((err) => {
         message.error(err.message);
@@ -52,6 +52,7 @@ export const MyCart = () => {
   };
 
   const onCloseDrawer = () => {
+    setDrawerClickedTimes(drawerClickedTimes + 1);
     setCartVisible(false);
   };
 
@@ -59,9 +60,9 @@ export const MyCart = () => {
     setCartVisible(true);
   };
 
-  const onRefresh = () => {
-    setRefresh(!refresh);
-  };
+  // const onRefresh = () => {
+  //   setRefresh(!refresh);
+  // };
 
   return (
     <>
@@ -84,7 +85,7 @@ export const MyCart = () => {
               strong={true}
             >{`Total price: $${cartData?.total_price}`}</Text>
             <div>
-              <Button onClick={onRefresh}>Refresh</Button>
+              {/* <Button onClick={onRefresh}>Refresh</Button> */}
               <Button onClick={onCloseDrawer} style={{ marginRight: 8 }}>
                 Cancel
               </Button>
@@ -113,8 +114,7 @@ export const MyCart = () => {
               <ItemQuantityModifier
                 itemId={item.menu_item_id}
                 quantity={item.quantity}
-                shape={"circle"}
-                onClick={onRefresh}
+                shape={"square"}
                 setPlusMinusButtonClickedTimes={setPlusMinusButtonClickedTimes}
                 plusMinusButtonClickedTimes={plusMinusButtonClickedTimes}
               />

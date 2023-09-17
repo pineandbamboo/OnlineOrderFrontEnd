@@ -1,5 +1,5 @@
 import { Layout, Typography } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FoodList from "./components/FoodList";
 import LoginForm from "./components/LoginForm";
 import MyCart from "./components/MyCart";
@@ -10,6 +10,7 @@ const { Title } = Typography;
 
 function App() {
   const [authed, setAuthed] = useState(false);
+  const [drawerClickedTimes, setDrawerClickedTimes] = useState(0);
   return (
     <Layout style={{ height: "100vh" }}>
       <Header>
@@ -21,10 +22,17 @@ function App() {
             level={2}
             style={{ color: "white", lineHeight: 1, marginBottom: 0 }}
           >
-            Lai Food
+            Food
           </Title>
           <div>
-            {authed ? /*<div>User Center</div>*/ <MyCart /> : <SignupForm />}
+            {authed ? (
+              /*<div>User Center</div>*/ <MyCart
+                drawerClickedTimes={drawerClickedTimes}
+                setDrawerClickedTimes={setDrawerClickedTimes}
+              />
+            ) : (
+              <SignupForm />
+            )}
           </div>
         </div>
       </Header>
@@ -36,7 +44,10 @@ function App() {
         }}
       >
         {authed ? (
-          <FoodList />
+          <FoodList
+            drawerClickedTimes={drawerClickedTimes}
+            setDrawerClickedTimes={setDrawerClickedTimes}
+          />
         ) : (
           <LoginForm onSuccess={() => setAuthed(true)} />
         )}

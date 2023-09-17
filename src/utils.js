@@ -30,7 +30,9 @@ export const signup = (data) => {
     body: JSON.stringify(data), // convert a JavaScript object (data) into a JSON string representation.
   }).then((response) => {
     if (response.status < 200 || response.status >= 300) {
-      throw Error("Fail to sign up" + response.statusText);
+      throw Error(
+        "Fail to sign up: " + response.status + " " + response.statusText
+      );
     }
   });
 };
