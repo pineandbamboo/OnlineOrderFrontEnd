@@ -21,8 +21,8 @@ const FoodList = (drawerClickedTimes, setDrawerClickedTimes) => {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingRest, setLoadingRest] = useState(false);
-  const [plusMinusButtonClickedTimes, setPlusMinusButtonClickedTimes] =
-    useState(0);
+  // const [plusMinusButtonClickedTimes, setPlusMinusButtonClickedTimes] =
+  //   useState(0);
 
   const getQuantityById = (orderItemId, order_items) => {
     const foundItem = order_items.find(
@@ -50,7 +50,23 @@ const FoodList = (drawerClickedTimes, setDrawerClickedTimes) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [plusMinusButtonClickedTimes, drawerClickedTimes]);
+  }, [drawerClickedTimes]);
+
+  const onUpdateCartSuccess = () => {
+    setLoading(true);
+    getCart()
+      .then((data) => {
+        data.order_items.sort((a, b) => a.menu_item_id - b.menu_item_id);
+        setCartData(data);
+        console.log("updated cart data");
+      })
+      .catch((err) => {
+        message.error(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
     setLoadingRest(true);
@@ -139,10 +155,11 @@ const FoodList = (drawerClickedTimes, setDrawerClickedTimes) => {
                       itemId={item.id}
                       quantity={getQuantityById(item.id, cartData?.order_items)}
                       shape={"circle"}
-                      setPlusMinusButtonClickedTimes={
-                        setPlusMinusButtonClickedTimes
-                      }
-                      plusMinusButtonClickedTimes={plusMinusButtonClickedTimes}
+                      // setPlusMinusButtonClickedTimes={
+                      //   setPlusMinusButtonClickedTimes
+                      // }
+                      // plusMinusButtonClickedTimes={plusMinusButtonClickedTimes}
+                      onUpdateCartSuccess={onUpdateCartSuccess}
                     />
                   </Col>
                 </Row>

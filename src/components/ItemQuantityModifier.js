@@ -4,7 +4,11 @@ import { addItemToCart } from "../utils";
 import { PlusOutlined, MinusOutlined, DeleteOutlined } from "@ant-design/icons";
 
 export const ItemQuantityModifier = (props) => {
-  const { plusMinusButtonClickedTimes, setPlusMinusButtonClickedTimes } = props;
+  const {
+    // plusMinusButtonClickedTimes,
+    // setPlusMinusButtonClickedTimes,
+    onUpdateCartSuccess,
+  } = props;
   const [quantity, setQuantity] = useState(props.quantity);
   // useEffect(() => {
   //     setLoadingRest(true);
@@ -13,7 +17,7 @@ export const ItemQuantityModifier = (props) => {
   const AddToCartButton = ({ itemId, quantity, icon, shape }) => {
     const [loading, setLoading] = useState(false);
     const AddToCart = () => {
-      setPlusMinusButtonClickedTimes(plusMinusButtonClickedTimes + 1);
+      // setPlusMinusButtonClickedTimes(plusMinusButtonClickedTimes + 1);
       setLoading(true);
       console.log("FoodList.js add item" + itemId + "with quantity" + quantity);
       addItemToCart(itemId, quantity)
@@ -23,6 +27,7 @@ export const ItemQuantityModifier = (props) => {
           );
           // setLoading(false);
           setQuantity(props.quantity);
+          onUpdateCartSuccess();
         })
         .catch((err) => {
           message.error(err.message);

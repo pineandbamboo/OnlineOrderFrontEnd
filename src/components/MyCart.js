@@ -13,8 +13,8 @@ export const MyCart = ({ drawerClickedTimes, setDrawerClickedTimes }) => {
   const [checking, setChecking] = useState(false);
   // const [refresh, setRefresh] = useState(false);
 
-  const [plusMinusButtonClickedTimes, setPlusMinusButtonClickedTimes] =
-    useState(0);
+  // const [plusMinusButtonClickedTimes, setPlusMinusButtonClickedTimes] =
+  //   useState(0);
 
   // get ths shopping cart data
   useEffect(() => {
@@ -34,7 +34,7 @@ export const MyCart = ({ drawerClickedTimes, setDrawerClickedTimes }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [cartVisible, plusMinusButtonClickedTimes]);
+  }, [cartVisible]);
 
   const onCheckOut = () => {
     setChecking(true);
@@ -63,6 +63,22 @@ export const MyCart = ({ drawerClickedTimes, setDrawerClickedTimes }) => {
   // const onRefresh = () => {
   //   setRefresh(!refresh);
   // };
+
+  const onUpdateCartSuccess = () => {
+    setLoading(true);
+    getCart()
+      .then((data) => {
+        data.order_items.sort((a, b) => a.menu_item_id - b.menu_item_id);
+        setCartData(data);
+        console.log("updated cart data");
+      })
+      .catch((err) => {
+        message.error(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <>
@@ -115,8 +131,9 @@ export const MyCart = ({ drawerClickedTimes, setDrawerClickedTimes }) => {
                 itemId={item.menu_item_id}
                 quantity={item.quantity}
                 shape={"square"}
-                setPlusMinusButtonClickedTimes={setPlusMinusButtonClickedTimes}
-                plusMinusButtonClickedTimes={plusMinusButtonClickedTimes}
+                // setPlusMinusButtonClickedTimes={setPlusMinusButtonClickedTimes}
+                // plusMinusButtonClickedTimes={plusMinusButtonClickedTimes}
+                onUpdateCartSuccess={onUpdateCartSuccess}
               />
             </List.Item>
           )}
